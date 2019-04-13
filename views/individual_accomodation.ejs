@@ -19,22 +19,17 @@
                         <h5><%=accomodation.city%></h5>
                         <h5><%=accomodation.email%></h5>
                         <h5><%=accomodation.contact%></h5>
-                        <% if(!currentUser){ %>
-                        <%  }else if(currentUser.isAdmin){ %>
+                        <% if(currentUser){ %>
                         <p><form method="GET"  action="/accomodations/edit/<%= accomodation._id %>">
-                                <button class="genric-btn success circle arrow">Edit</button>
-                            </form>
-                        </p>
-                        <p><form method="POST" action="/accomodations/<%=accomodation._id%>?_method=DELETE">
-                                <button class="genric-btn success circle arrow">Delete</button>
-                            </form>
-                        </p>
-                        <%  }else{ %>
-                        <p><form method="GET"  action="/accomodations/edit/book/<%= accomodation._id %>">
-                                <button class="genric-btn success circle arrow">Book Appointment</button>
-                            </form>
-                        </p>
-                        <% } %>
+								<button class="genric-btn success circle arrow">Edit</button>
+							</form>
+						</p>
+						<p><form method="POST" action="/accomodations/<%=accomodation._id%>?_method=DELETE">
+								<button class="genric-btn success circle arrow">Delete</button>
+							</form>
+						</p>	
+							
+          				<%  } %>
                     </div>
                 </div>
             </div>

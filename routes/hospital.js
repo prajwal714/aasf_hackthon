@@ -26,7 +26,7 @@ router.get("/",function(req,res){
 });
 
 
-router.get("/new", middleware.isLoggedIn, IsAdmin, function(req,res){
+router.get("/new", middleware.isLoggedIn, function(req,res){
 	res.render("new_hospital");
 });
 
@@ -63,48 +63,16 @@ router.get("/:id",function(req,res){
 	});
 });
 
+//edit
 
-router.get("/edit/:id", isLoggedIn, IsAdmin, function(req,res){
+//update
+
+router.get("/edit/:id", isLoggedIn ,function(req,res){
 	Hospital.findById(req.params.id, function(err,foundHospital){
 		if(err){
 			res.redirect("/hospitals");
 		}else{
 			res.render("edit_hospitals", {hospital:foundHospital});
-		}
-	});
-});
-router.get("/edit/book/:id", isLoggedIn, function(req,res){
-	Hospital.findById(req.params.id, function(err,foundHospital){
-		if(err){
-			res.redirect("/hospitals");
-		}else{
-			var msg='';
-			var nodemailer = require('nodemailer');
-
-			var transport = nodemailer.createTransport({
-			service:'gmail',
-			 auth: {
-			             user: "chaturvediabhay24@gmail.com",
-			             pass: ""
-			        }
-			    });
-			var mailOptions = {
-			        from: "chaturvediabhay24@gmail.com", 
-			        to:'<%= foundHospital.email %>', 
-			        subject: "Appointment request", 
-			        text: "Hello, A patient tried booking an Appointment. His details are as follows: ",  
-			    }
-			transport.sendMail(mailOptions, function(error, response){
-			    if(error){
-			         msg=res.send("Email could not sent due to error: "+error);
-			         console.log('Error');
-			    }else{
-			         msg= res.send("Email has been sent successfully");
-			         console.log('mail sent');
-			    } 
-			}); 
-
-			res.send("Mail Send");
 		}
 	});
 });
@@ -119,7 +87,7 @@ router.put("/:id",  function(req,res){
 	});
 });
 //delete hospital
-router.delete("/:id", isLoggedIn, IsAdmin, function(req,res){
+router.delete("/:id", function(req,res){
 	Hospital.findByIdAndRemove(req.params.id, function(err){
 		if(err){
 			res.redirect("/");
@@ -138,11 +106,5 @@ function isLoggedIn(req, res, next){
 		return next();
 	}
 	res.redirect("/login");
-}
-function IsAdmin(req, res, next){
-	if(req.user.isAdmin){
-		return next();
-	}
-	res.redirect("/myprofile");
 }
 module.exports=router;

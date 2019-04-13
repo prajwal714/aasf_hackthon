@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- <script async defer
+    <!-- src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEWDZiiUhPeT9RjV1xP5ADUaP0Ce4oiOg&callback=initMap"> -->
+    <!-- </script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEWDZiiUhPeT9RjV1xP5ADUaP0Ce4oiOg&libraries=places"></script>
+    <style>
+      html, body, #map-canvas {
+                                height: 80%;
+                               
+                                margin: 20px;
+                                padding: 0px
+                              }</style>
+  <title>Document</title>
+</head>
+<body>
+  
+  <input id="city" type="text" name="city" placeholder="city" >
+  <input id="country" type="text" name="country" placeholder="country">
+    <button id="btn">Get Hospitals</button>
+
+  <div id="map-canvas"></div>
+</body>
+
+<script>
+
+var latitude,longitude;
+document.querySelector("#btn").addEventListener("click",function(){
+            var city=document.getElementById("city").value;
+            var country=document.getElementById("country").value;
+            var geocoder =  new google.maps.Geocoder();
+    geocoder.geocode( { 'address': 'miami, us'}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            latitude=results[0].geometry.location.lat();
+            longitude=results[0].geometry.location.lng();
+            console.log("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng()); 
+            initialize();
+          } else {
+            alert("Something got wrong " + status);
+          }
+        });
+});
+
+     var map;
+      var infowindow;
+
+      function initialize() {
+        var varanasi = new google.maps.LatLng(latitude, longitude); // sample location to start with: Mumbai, India
+
+      map = new google.maps.Map(document.getElementById('map-canvas'), {
+        center: varanasi,
+        zoom: 15
+      });
+      
+      var request = {
+        location: varanasi,
+        radius: 200,
+        types: ['hospital', 'health'] // this is where you set the map to get the hospitals and health related places
+      };
+      infowindow = new google.maps.InfoWindow();
+      var service = new google.maps.places.PlacesService(map);
+      service.nearbySearch(request, callback);
+      
+      
+      function callback(results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          createMarker(results[i]);
+        }
+      }
+      }
+      
+      function createMarker(place) {
+      var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location
+      });
+      
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+      });
+      }
+    }
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+  </script>
+</html>
+
+
