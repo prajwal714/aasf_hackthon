@@ -67,20 +67,24 @@
                         <li class="menu-has-children"><a href="">Pages</a>
                             <ul>
                                 <li><a href="/aboutus">About Us</a></li>
-                                <li><a href="elements.html">Services</a></li>
-                            </ul>
-                        </li>
-                        <li class="menu-has-children"><a href="">blog</a>
-                            <ul>
-                                <li><a href="blog-home.html">blog home</a></li>
-                                <li><a href="blog-details.html">blog details</a></li>
+                                <li><a href="/services">Services</a></li>
                             </ul>
                         </li>
                         <li><a href="/contact">Contact</a></li> 
-                    <% if(currentUser){ %>
+                    <% if(!currentUser){ %>
+                        <li class="menu-has-children"><a href="">Auth</a>
+                            <ul>
+                                <li><a href="/login">Login</a></li>
+                                <li><a href="/register">Signup</a></li>
+                            </ul>
+                        </li>
+                    <% } else if(currentUser.isAdmin){%>
                         <li><a href="/logout">LOG OUT</a></li>
                         <li><a href="/secret"><%= currentUser.username %></a></li>
-                    <% } %>                                 
+                    <% }else{ %>     
+                        <li><a href="/logout">LOG OUT</a></li>
+                        <li><a href="/myprofile"><%= currentUser.username %></a></li>
+                    <% } %>            
                     </ul>
                 </nav><!-- #nav-menu-container -->            
                 </div>

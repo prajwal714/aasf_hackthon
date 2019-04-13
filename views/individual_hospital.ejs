@@ -19,7 +19,8 @@
                         <h5><%=hospital.city%></h5>
                         <h5><%=hospital.email%></h5>
                         <h5><%=hospital.contact%></h5>
-                        <% if(currentUser){ %>
+                        <% if(!currentUser){ %>
+                        <%  }else if(currentUser.isAdmin){ %>
                         <p><form method="GET"  action="/hospitals/edit/<%= hospital._id %>">
 								<button class="genric-btn success circle arrow">Edit</button>
 							</form>
@@ -27,9 +28,13 @@
 						<p><form method="POST" action="/hospitals/<%=hospital._id%>?_method=DELETE">
 								<button class="genric-btn success circle arrow">Delete</button>
 							</form>
-						</p>	
-							
-          				<%  } %>
+						</p>
+          				<%  }else{ %>
+                        <p><form method="GET"  action="/hospitals/edit/book/<%= hospital._id %>">
+                                <button class="genric-btn success circle arrow">Book Appointment</button>
+                            </form>
+                        </p>
+                        <% } %>
                     </div>
                 </div>
             </div>

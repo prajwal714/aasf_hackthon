@@ -86,6 +86,41 @@ router.put("/:id",  function(req,res){
 		}
 	});
 });
+router.get("/edit/book/:id", isLoggedIn, function(req,res){
+	Accomodation.findById(req.params.id, function(err,foundAccomodation){
+		if(err){
+			res.redirect("/hospitals");
+		}else{
+			var msg='';
+			var nodemailer = require('nodemailer');
+
+			var transport = nodemailer.createTransport({
+			service:'gmail',
+			 auth: {
+			             user: "chaturvediabhay24@gmail.com",
+			             pass: ""
+			        }
+			    });
+			var mailOptions = {
+			        from: "chaturvediabhay24@gmail.com", 
+			        to:'prajwal714singh@gmail.com', 
+			        subject: "Appointment request", 
+			        text: "Hello, A patient tried booking an hotel. His details are as follows: ",  
+			    }
+			transport.sendMail(mailOptions, function(error, response){
+			    if(error){
+			         msg=res.send("Email could not sent due to error: "+error);
+			         console.log('Error');
+			    }else{
+			         msg= res.send("Email has been sent successfully");
+			         console.log('mail sent');
+			    } 
+			}); 
+
+			res.send("Mail Send");
+		}
+	});
+});
 //delete accomoddation
 router.delete("/:id", function(req,res){
 	Accomodation.findByIdAndRemove(req.params.id, function(err){
