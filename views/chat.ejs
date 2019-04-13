@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real time chat</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+  <style>
+      button{
+         float: right;
+      }
+      div{
+          padding: 20px 20px;
+
+      }
+  </style>
+</head>
+<body>
+<div class="container">
+    <br>
+    <div class="jumbotron">
+        <h1 class="display-4">Hello I am Your MediBot:</h1>
+        <p>Choose Among the following Services: </p>
+        <br>
+        
+        
+            <div>1. Enter your symptoms to predict your disease: <button id="predict" class="btn btn-success">1</button></div>
+            <div>2. Check Your Health Status based on your personal information: <button id="bmi" class="btn btn-danger">2</button></div>
+            <div>3. Predict your Insurance cost Based on your current BMI,smoking habits, age etc: <button class="btn btn-info">3</button></div>
+            <div>4. Check Your Eligibility for Ayush Bharat Scheme: <button onclick="eligible()" class="btn btn-warning">4</button></div>
+            <div>5. Know your Hospitals in locality which come under this scheme: <button class="btn btn-danger"><a href="map.html">5</a></button></div>
+       
+        <br>
+        <div id="p">
+            
+            <form style="visibility: hidden; margin-top: 50px;"id="form" action="/predict" method="POST">
+                Enter Atleast 3 Symptoms:<input id="disease" type="text" value="" name="disease">
+                
+                Your Entered Symptoms: <input id="hidden_input" type="text" name="diseases">
+                
+            </form>
+            <button id="add" class="btn btn-info">Add</button>
+            <button id="submit" class="btn btn-success btn-large">SUBMIT</button>
+        </div>
+        
+        <div id="b">
+                <form style="visibility: hidden; margin-top: 50px;"id="bmi_form" action="/bmi" method="POST">
+                    Enter Your Gender:<input id="gender" type="text" value="" name="gender">
+                    Your Weight: <input id="weight" type="text" name="weight">
+                    Your height: <input id="height" type="text" name="height">
+                    <button id="bmi_submit" class="btn btn-success btn-large">SUBMIT</button>
+                </form>
+
+        </div>
+         
+        
+        
+    </div>
+    <div id="messages">
+        
+
+    </div>
+</div>
+<script>
+   var diseases=[];
+   var add=document.querySelector("#add");
+   var bmi=document.querySelector("#bmi");
+   var predict=document.querySelector("#predict");
+   predict.addEventListener("click",function()
+   {
+            var x = document.getElementById("p");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+       
+
+    document.querySelector("#form").style.visibility="visible";
+   });
+   var bmi=document.querySelector("#bmi");
+  bmi.addEventListener("click",function()
+   {
+            var x = document.getElementById("b");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+       
+
+    document.querySelector("#bmi_form").style.visibility="visible";
+   });
+//    bmi.addEventListener("click",function()
+//    {
+
+//     document.querySelector("#bmi_form").style.visibility="visible";
+//    });
+       
+
+    add.addEventListener("click",function()
+    {
+        
+        var disease=document.querySelector("#disease").value;
+        document.querySelector("#disease").value="";
+
+            diseases.push(disease);
+            console.log(disease);
+
+    })
+       
+
+        var submit=document.querySelector("#submit");
+
+        submit.addEventListener("click",function()
+        {
+            document.querySelector("#hidden_input").value=JSON.stringify(diseases);
+           
+            document.querySelector("#form").submit();
+           
+            console.log("You clicked submit button");
+        });
+      
+</script>
+</body>
+</html>

@@ -36,7 +36,7 @@ router.post("/", function(req,res){
 			console.log(err);
 		}else{
 			console.log("comment aaya");
-			res.redirect("/");
+			res.redirect("/#contact");
 		}
 	})
 });
@@ -50,7 +50,7 @@ router.post("/contact", function(req,res){
 			console.log(err);
 		}else{
 			console.log("comment aaya");
-			res.redirect("/contactus");
+			res.redirect("/#contact");
 		}
 	})
 });
@@ -74,16 +74,6 @@ router.post("/register", function(req,res){
 		});
 	});
 });
-router.get("/all-contactus", function(req,res){
-	console.log(req.user);
-	Contactus.find({},function(err, allcontactus){
-		if(err){
-			console.log(err);
-		}else{
-			res.render("all-contactus",{contactus:allcontactus, currentUser:req.user});
-		}
-	});
-});
 
 //=======================
 //login routes start
@@ -92,7 +82,7 @@ router.get("/login",function(req,res){
 	res.render("login");
 });
 router.post("/login", passport.authenticate("local",{
-	successRedirect:"/",
+	successRedirect:"/secret",
 	failureRedirect:"/login"
 }) ,function(req,res){
 
@@ -103,12 +93,8 @@ router.get("/logout", function(req,res){
 	res.redirect("/");
 });
 
-router.get("/secret", isLoggedIn, IsAdmin, function(req,res){
+router.get("/secret", isLoggedIn, function(req,res){
 	res.render("secret");
-});
-
-router.get("/myprofile", isLoggedIn, function(req,res){
-	res.render("myprofile");
 });
 
 router.get("/details/our_objective",function(req,res){
@@ -120,11 +106,5 @@ function isLoggedIn(req, res, next){
 		return next();
 	}
 	res.redirect("/login");
-}
-function IsAdmin(req, res, next){
-	if(req.user.isAdmin){
-		return next();
-	}
-	res.redirect("/myprofile");
 }
 module.exports=router;
